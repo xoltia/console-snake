@@ -59,7 +59,7 @@ void Snake::EatApple()
 	Grow();
 	head.GetScreen()->IncrementScore(1);
 	Vec2 applePos = Vec2(rand() % head.GetScreen()->GetWidth(), rand() % head.GetScreen()->GetHeight());
-	while (head.GetScreen()->DrawableAt(applePos.x, applePos.y))
+	while (head.GetScreen()->DrawableAt(applePos.x, applePos.y) != nullptr)
 	{
 		applePos = Vec2(rand() % head.GetScreen()->GetWidth(), rand() % head.GetScreen()->GetHeight());
 	}

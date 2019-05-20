@@ -26,7 +26,7 @@ void HookKeyboard(Screen& s)
 	UnhookWindowsHookEx(keyHook);
 }
 
-int main()
+int main(int arc, char** argv)
 {
 	int framerate;
 #ifdef _DEBUG
@@ -90,7 +90,6 @@ int main()
 #endif
 		// Check if any drawables need to be redrawn
 		if (screen.ShouldRedraw())
-
 			screen.Render();
 	}
 	
