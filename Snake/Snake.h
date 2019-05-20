@@ -2,14 +2,7 @@
 #include "Actor.h"
 #include "Updateable.h"
 #include <vector>
-
-// TODO add vec2 coordinates elsewhere and have drawables, screen, etc be able to use it natively for working with positions
-
-struct Vec2
-{
-	int x, y;
-	Vec2(int x, int y) : x(x), y(y) {};
-};
+#include "Vector.h"
 
 class Snake : public Updateable
 {

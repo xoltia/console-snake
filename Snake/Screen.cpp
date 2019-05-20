@@ -36,6 +36,13 @@ Drawable* Screen::DrawableAt(int x, int y)
 	return nullptr;
 }
 
+Drawable* Screen::DrawableAt(Vec2 pos)
+{
+	for (int i = 0; i < drawables.size(); i++)
+		if (drawables[i]->GetPosition() == pos) return drawables[i];
+	return nullptr;
+}
+
 bool Screen::ShouldRedraw()
 {
 	for (int i = 0; i < drawables.size(); i++)

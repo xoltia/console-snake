@@ -14,38 +14,55 @@ void Drawable::ClearRedraw()
 
 int Drawable::GetX() const
 {
-	return x;
+	return position.x;
 }
 
 int Drawable::GetY() const
 {
-	return y;
+	return position.y;
+}
+
+Vec2 Drawable::GetPosition() const
+{
+	return position;
 }
 
 void Drawable::Move(int xa, int ya)
 {
-	x += xa;
-	y += ya;
+	position.x += xa;
+	position.y += ya;
 	needsRedraw = true;
 }
 
 void Drawable::Move(int v[2])
 {
-	x += v[0];
-	y += v[1];
+	position.x += v[0];
+	position.y += v[1];
+	needsRedraw = true;
+}
+
+void Drawable::Move(Vec2 v)
+{
+	position += v;
 	needsRedraw = true;
 }
 
 void Drawable::GoTo(int xa, int ya)
 {
-	x = xa;
-	y = ya;
+	position.x = xa;
+	position.y = ya;
 	needsRedraw = true;
 }
 
 void Drawable::GoTo(int v[2])
 {
-	x = v[0];
-	y = v[1];
+	position.x = v[0];
+	position.y = v[1];
+	needsRedraw = true;
+}
+
+void Drawable::GoTo(Vec2 v)
+{
+	position = v;
 	needsRedraw = true;
 }

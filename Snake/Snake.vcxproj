@@ -159,6 +159,7 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="Updateable.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -172,6 +173,7 @@
     </ClCompile>
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Snake.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

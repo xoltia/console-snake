@@ -30,6 +30,7 @@ public:
 	bool Destroy(Drawable* drawable);
 	void Update();
 	bool ShouldRedraw();
+	Drawable* DrawableAt(Vec2 pos);
 	Drawable* DrawableAt(int x, int y);
 	static LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 	bool GetInput(char key);
