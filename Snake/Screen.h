@@ -12,12 +12,14 @@ private:
 	int height, width;
 	static bool keys[128];
 	static std::vector<const char*> messages;
+	int score;
 public:
 	bool shouldClose;
 
 	Screen(int h, int w) : height(h), width(w) {};
 	Screen(int h, int w, int rm) : height(h), width(w) {};
 
+	void IncrementScore(int amount);
 	static void Log(const char* message);
 	static void ClearLog();
 	int GetHeight() const;
