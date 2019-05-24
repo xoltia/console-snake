@@ -68,9 +68,9 @@ void Snake::EatApple()
 
 void Snake::Grow()
 {
-	int* hVel = head.GetVelocity();
+	Vec2 hVel = (Vec2)head.GetVelocity();
 	Vec2 last = positions.at(positions.size() - 1);
-	Vec2 newCellPos = last - Vec2(hVel);
+	Vec2 newCellPos = last - hVel;
 	Drawable* newCell = new Drawable(cellChar, newCellPos);
 	positions.push_back(newCellPos);
 	cells.push_back(newCell);
