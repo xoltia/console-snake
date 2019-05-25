@@ -20,6 +20,7 @@ public:
 	Screen(int h, int w, int rm) : height(h), width(w) {};
 
 	void IncrementScore(int amount);
+	int GetScore() const;
 	static void Log(const char* message);
 	static void ClearLog();
 	int GetHeight() const;

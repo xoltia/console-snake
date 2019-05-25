@@ -7,6 +7,7 @@
 #include "Actor.h"
 #include "Log.h"
 #include "Snake.h"
+#include <Python.h>
 
 #undef max
 
@@ -68,7 +69,35 @@ void ShowConsoleCursor(bool showFlag)
 
 int main(int argc, char** argv)
 {
-	// TODO add CMD arguments for custom size and custom framerate in release
+	PyObject *pFunc, *pModule, *pName, *pValue;
+
+	const wchar_t* libs = L"libs";
+	wchar_t exe[MAX_PATH];
+	GetModuleFileName(NULL, exe, MAX_PATH);
+
+	int exeLen = 0;
+	wchar_t libPath[MAX_PATH];
+
+	for (int i = 0; exe[i] != '\0'; i++)
+		exeLen++;
+
+	for (int j = 0; j < exeLen - 4; j++)
+	{
+		if (j >= exeLen - 9)
+			libPath[j] = libs[j - (exeLen - 9)];
+		else 
+			libPath[j] = exe[j];
+	}
+
+	Py_SetPath((const wchar_t*)libPath);
+	Py_Initialize();
+	PyObject* sysPath = PySys_GetObject("path");
+	PyList_Append(sysPath, PyUnicode_FromString("."));
+	PyList_Append(sysPath, PyUnicode_FromString("Scripts"));
+
+	pName = PyUnicode_FromString("score_tracker");
+	pModule = PyImport_Import(pName);
+
 	GameSettings settings = ParseArgs(argc, argv);
 	int framerate = settings.Framerate;
 #ifdef _DEBUG
@@ -138,9 +167,19 @@ int main(int argc, char** argv)
 	PostThreadMessage(GetThreadId(hookThread.native_handle()), WM_QUIT, 0, 0);
 	hookThread.join();
 
+	int score = screen.GetScore();
+	pFunc = PyObject_GetAttrString(pModule, "save_score");
+	PyObject_CallObject(pFunc, Py_BuildValue("(i)", score));
+	pFunc = PyObject_GetAttrString(pModule, "get_high_score");
+	pValue = PyObject_CallObject(pFunc, NULL);
+	int highScore = _PyLong_AsInt(pValue);
+
+	Py_Finalize();
+
 	// Tell player they suck
 	system("cls");
 	std::cout << "Game over!" << std::endl;
+	std::cout << "Your score was: " << score << "\nYour high score is: " << highScore << std::endl;
 	std::cin.get();
 	return 0;
 }

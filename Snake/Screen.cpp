@@ -162,3 +162,8 @@ void Screen::IncrementScore(int amount)
 {
 	score += amount;
 }
+
+int Screen::GetScore() const
+{
+	return score;
+}
