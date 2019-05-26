@@ -146,7 +146,7 @@ int main(int argc, char** argv)
 	ShowConsoleCursor(false);
 	screen.Render();
 
-	auto std_time = [](){ return  std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()); };
+	auto std_time = []{ return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()); };
 	std::chrono::milliseconds last = std_time();
 
 	Discord_Initialize(ApplicationID, NULL, 1, NULL);
@@ -189,7 +189,8 @@ int main(int argc, char** argv)
 
 		UpdateRPC(screen.GetScore());
 	}
-	
+
+	Discord_ClearPresence();
 	Discord_Shutdown();
 
 	// Tell thread to stop and wait for it to stop
