@@ -8,8 +8,13 @@
 #include "Log.h"
 #include "Snake.h"
 #include <Python.h>
+#include <discord_rpc.h>
+#include <time.h>
 
 #undef max
+
+static const char* ApplicationID = "581978887697727488";
+static int64_t rpcStart;
 
 struct GameSettings
 {
@@ -54,6 +59,23 @@ void HookKeyboard(Screen& s)
 		DispatchMessage(&msg);
 	}
 	UnhookWindowsHookEx(keyHook);
+}
+
+void UpdateRPC(int score)
+{
+	char buffer[256];
+	DiscordRichPresence discordPresence;
+	memset(&discordPresence, 0, sizeof(discordPresence));
+	sprintf_s(buffer, "Apples consumed: %d", score);
+	discordPresence.details = buffer;
+	discordPresence.startTimestamp = rpcStart;
+	discordPresence.largeImageKey = "icon";
+#ifdef _DEBUG
+	discordPresence.smallImageKey = "debug-icon";
+#else
+	discordPresence.smallImageKey = "release-icon";
+#endif
+	Discord_UpdatePresence(&discordPresence);
 }
 
 void ShowConsoleCursor(bool showFlag)
@@ -124,13 +146,16 @@ int main(int argc, char** argv)
 	ShowConsoleCursor(false);
 	screen.Render();
 
-	auto time = [](){ return  std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()); };
-	std::chrono::milliseconds last = time();
+	auto std_time = [](){ return  std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()); };
+	std::chrono::milliseconds last = std_time();
+
+	Discord_Initialize(ApplicationID, NULL, 1, NULL);
+	rpcStart = time(NULL);
 
 	while (!screen.shouldClose)
 	{
 		// Limit framerate
-		std::chrono::milliseconds now = time();
+		std::chrono::milliseconds now = std_time();
 		if (now.count() - last.count() < 1000 / framerate)
 			continue;
 		last = now;
@@ -161,8 +186,12 @@ int main(int argc, char** argv)
 		// Check if any drawables need to be redrawn
 		if (screen.ShouldRedraw())
 			screen.Render();
+
+		UpdateRPC(screen.GetScore());
 	}
 	
+	Discord_Shutdown();
+
 	// Tell thread to stop and wait for it to stop
 	PostThreadMessage(GetThreadId(hookThread.native_handle()), WM_QUIT, 0, 0);
 	hookThread.join();
